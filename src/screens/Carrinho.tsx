@@ -58,13 +58,13 @@ import {
                   </View>
                   <View style={styles.cardDown}>
                     <View>
-                      <TouchableOpacity>
-                        <Ionicons name="heart-outline" size={24} color={"#000"} />
+                      <TouchableOpacity onPress={deletar}>
+                        <Ionicons name="trash-outline" size={24} color={"#000"} />
                       </TouchableOpacity>
   
-                      <TouchableOpacity>
+                      {/* <TouchableOpacity>
                         <Ionicons name="cart-outline" size={24} color={"#000"} />
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
                     </View>
                     <View>
                       <Image source={item.imagem} />
