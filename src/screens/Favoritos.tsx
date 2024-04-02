@@ -22,15 +22,24 @@ export default ({ navigation }) => {
     }
   };
 
-  const unlike = async()=>{
-    
+  const unlike = async(item)=>{
+    const novosFavoritos = favoritos.filter((produto)=>produto.nome != item.nome);
+    await AsyncStorage.setItem("favoritos", JSON.stringify(novosFavoritos));
+    setFavoritos(novosFavoritos);
+    AsyncStorage.setItem("favoritos", JSON.stringify(novosFavoritos));
+    alert("Produto removido dos favoritos");
   }
 
 
   useEffect(() => {
     buscarDados();
     
-  }, []);
+  }, [favoritos]);
+
+  useEffect(() => {
+    buscarDados();
+  
+  }, [favoritos]);
 
   return (
     <View style={styles.container}>
@@ -43,7 +52,7 @@ export default ({ navigation }) => {
         renderItem={({ item, index }) => {
           return (
             <View>
-              <View style={styles.card}>
+              <View style={styles.card}  >
                 <LinearGradient
                   // Background Linear Gradient
                   colors={["rgba(17,17,17,0.6)", "transparent"]}
@@ -64,7 +73,7 @@ export default ({ navigation }) => {
                 </View>
                 <View style={styles.cardDown}>
                   <View>
-                    <TouchableOpacity onPress={unlike}>
+                    <TouchableOpacity onPress={()=>unlike(item)}>
                       <Ionicons name="heart-dislike-outline" size={24} color={"#000"} />
                     </TouchableOpacity>
 

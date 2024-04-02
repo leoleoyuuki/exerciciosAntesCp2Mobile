@@ -18,35 +18,32 @@ const blusas = [
     nome: "Moletom Preto",
     preco: 217.5,
     imagem: require("../../assets/moletom-preto.jpg"),
-
+    id: 1,
   },
   {
     nome: "Moletom Branco",
     preco: 217.5,
     imagem: require("../../assets/moletom-branco.jpg"),
-
+    id: 2,
   },
-  
+
   {
     nome: "Blusa Branca",
     preco: 109.8,
     imagem: require("../../assets/blusa-branca.jpg"),
-
+    id: 3,
   },
 ];
 export function Blusas() {
   const [favoritos, setFavoritos] = useState([]);
   const [carrinho, setCarrinho] = useState([]);
 
-  // async function buscarDasdos(){
-  //   const f = await AsyncStorage.getItem("favoritos")
-  //   console.log(JSON.parse(f))
-  //  }
-// useEffect(()=>{
-//   AsyncStorage.clear()
-// })
-useEffect(() => {
-  async function loadFavoritos() {
+  
+
+  useEffect(() => {
+
+
+    async function loadFavoritos() {
     const fav = await AsyncStorage.getItem("favoritos");
     if (fav !== null) {
       setFavoritos(JSON.parse(fav));
@@ -59,21 +56,34 @@ useEffect(() => {
       setCarrinho(JSON.parse(cart));
     }
   }
+    loadFavoritos();
+    loadCarrinho();
+  });
 
-  loadFavoritos();
-  loadCarrinho();
-}, []);
-async function addFavoritos(item) {
-  const newFavoritos = [...favoritos, item];
-  setFavoritos(newFavoritos);
-  await AsyncStorage.setItem("favoritos", JSON.stringify(newFavoritos));
-}
 
-async function addCarrinho(item) {
-  const newCarrinho = [...carrinho, item];
-  setCarrinho(newCarrinho);
-  await AsyncStorage.setItem("carrinho", JSON.stringify(newCarrinho));
-}
+
+  async function addFavoritos(item) {
+    if (favoritos.includes(item)) {
+      alert("Item já adicionado aos favoritos");
+    } else {
+      const newFavoritos = [...favoritos, item];
+      setFavoritos(newFavoritos);
+      await AsyncStorage.setItem("favoritos", JSON.stringify(newFavoritos));
+    }
+  }
+  async function addCarrinho(item) {
+    if (carrinho.includes(item)) {
+      let novoCarrinho = carrinho.filter((produto) => produto.id === item.id)
+      novoCarrinho[0].quantidade += 1;
+      setCarrinho(novoCarrinho);
+      await AsyncStorage.setItem("carrinho", JSON.stringify(carrinho));
+
+    } else {
+      const newCarrinho = [...carrinho, item];
+      setCarrinho(newCarrinho);
+      await AsyncStorage.setItem("carrinho", JSON.stringify(newCarrinho));
+    }
+  }
 
   return (
     <FlatList
@@ -140,7 +150,6 @@ const calcas = [
   },
 ];
 export function Calcas() {
-
   const [favoritos, setFavoritos] = useState([]);
   const [carrinho, setCarrinho] = useState([]);
 
@@ -148,34 +157,34 @@ export function Calcas() {
   //   const f = await AsyncStorage.getItem("favoritos")
   //   console.log(JSON.parse(f))
   //  }
-// useEffect(()=>{
-//   AsyncStorage.clear()
-// })
-useEffect(() => {
-  async function loadFavoritos() {
-    const fav = await AsyncStorage.getItem("favoritos");
-    if (fav !== null) {
-      setFavoritos(JSON.parse(fav));
+  // useEffect(()=>{
+  //   AsyncStorage.clear()
+  // })
+  useEffect(() => {
+    async function loadFavoritos() {
+      const fav = await AsyncStorage.getItem("favoritos");
+      if (fav !== null) {
+        setFavoritos(JSON.parse(fav));
+      }
     }
-  }
 
-  async function loadCarrinho() {
-    const cart = await AsyncStorage.getItem("carrinho");
-    if (cart !== null) {
-      setCarrinho(JSON.parse(cart));
+    async function loadCarrinho() {
+      const cart = await AsyncStorage.getItem("carrinho");
+      if (cart !== null) {
+        setCarrinho(JSON.parse(cart));
+      }
     }
-  }
 
-  loadFavoritos();
-  loadCarrinho();
-}, []);
+    loadFavoritos();
+    loadCarrinho();
+  }, []);
 
   async function addFavoritos(item) {
     const newFavoritos = [...favoritos, item];
     setFavoritos(newFavoritos);
     await AsyncStorage.setItem("favoritos", JSON.stringify(newFavoritos));
   }
-  
+
   async function addCarrinho(item) {
     const newCarrinho = [...carrinho, item];
     setCarrinho(newCarrinho);

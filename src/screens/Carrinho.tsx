@@ -14,18 +14,27 @@ import {
   
   export default ({ navigation }) => {
     const [carrinho, setCarrinho] = useState([]);
-    let fav = [];
+    let cart = [];
   
     async function buscarDados() {
       if (JSON.parse(await AsyncStorage.getItem("carrinho"))) {
-        fav = JSON.parse(await AsyncStorage.getItem("carrinho"));
-        setCarrinho(fav);
+        cart = JSON.parse(await AsyncStorage.getItem("carrinho"));
+        setCarrinho(cart);
       }
     }
     useEffect(() => {
       buscarDados();
     },[carrinho]);
   
+    const deletar = async (item) => {
+      const novoCarrinho = carrinho.filter(
+        (produto) => produto.nome != item.nome
+      );
+      setCarrinho(novoCarrinho);
+      await AsyncStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
+      
+    };
+
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -58,7 +67,7 @@ import {
                   </View>
                   <View style={styles.cardDown}>
                     <View>
-                      <TouchableOpacity onPress={deletar}>
+                      <TouchableOpacity onPress={()=>deletar(item)}>
                         <Ionicons name="trash-outline" size={24} color={"#000"} />
                       </TouchableOpacity>
   
